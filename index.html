@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Ultra Disco Göktaş Şakaları</title>
+    <style>
+        :root {
+            --crazy-color-1: #ff00ff;
+            --crazy-color-2: #00ff88;
+            --crazy-color-3: #ff5500;
+        }
+
+        body {
+            margin: 0;
+            background: #000;
+            color: white;
+            font-family: 'Comic Sans MS', cursive;
+            overflow: hidden;
+            transition: 0.5s;
+        }
+
+        .crazy-header {
+            font-size: 5em;
+            text-align: center;
+            animation: rainbow 2s infinite;
+            margin: 20px;
+            cursor: pointer;
+            text-shadow: 0 0 20px;
+        }
+
+        .main-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 50px;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .character-card {
+            width: 400px;
+            min-height: 600px;
+            border-radius: 50px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            transition: 1s;
+            background-size: cover;
+        }
+
+        #sila-card {
+            background: linear-gradient(45deg, #0000ff, #ff00ff),
+                        url('https://i.imgur.com/zNPKN5G.png');
+            border: 5px solid var(--crazy-color-2);
+        }
+
+        #muhammetcan-card {
+            background: linear-gradient(45deg, #ff0000, #ffff00),
+                        url('https://i.imgur.com/7QXZR7P.png');
+            border: 5px solid var(--crazy-color-3);
+            animation: muhammetcanShake 0.1s infinite;
+        }
+
+        .stats-bar {
+            height: 30px;
+            background: #fff3;
+            margin: 20px 0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .stats-fill {
+            height: 100%;
+            width: 158%;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--crazy-color-1),
+                var(--crazy-color-1) 10px,
+                var(--crazy-color-2) 10px,
+                var(--crazy-color-2) 20px
+            );
+            animation: barSlide 1s infinite linear;
+        }
+
+        .disco-effect {
+            position: fixed;
+            width: 200vw;
+            height: 200vh;
+            background: repeating-radial-gradient(
+                circle,
+                #ff00ff 0%,
+                #00ff88 20%,
+                #ff5500 40%
+            );
+            opacity: 0.3;
+            pointer-events: none;
+            animation: discoRotate 10s infinite linear;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            20% { color: #ff9900; }
+            40% { color: #ffff00; }
+            60% { color: #33ff00; }
+            80% { color: #0099ff; }
+            100% { color: #cc00ff; }
+        }
+
+        @keyframes muhammetcanShake {
+            0% { transform: rotate(1deg); }
+            50% { transform: rotate(-1deg); }
+            100% { transform: rotate(1deg); }
+        }
+
+        @keyframes barSlide {
+            from { transform: translateX(-50%); }
+            to { transform: translateX(0%); }
+        }
+
+        @keyframes discoRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .secret-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="disco-effect" id="discoEffect"></div>
+    
+    <h1 class="crazy-header" onclick="toggleDisco()">
+        🌠 Sıla vs Muhammetcan: Galaktik Şakalar 🍕
+    </h1>
+
+    <div class="main-container">
+        <div class="character-card" id="sila-card">
+            <h2>🚀 Göktaşlı Süperstar</h2>
+            <div class="stats-bar">
+                <div class="stats-fill" style="background: linear-gradient(90deg, #00ff88, #ff00ff)"></div>
+            </div>
+            <ul>
+                <li>📏 Boy: "158 Işık Yılı"</li>
+                <li>💫 Yetenek: Göktaşlarıyla rap yapma</li>
+                <li>🎯 Rekor: 1 Saniyede 158 Meteor Yakalama</li>
+            </ul>
+            <button onclick="meteorRain()" style="margin-top: 20px; padding: 15px; background: var(--crazy-color-1);">
+                🌠 Meteor Yağmuru Başlat
+            </button>
+        </div>
+
+        <div class="character-card" id="muhammetcan-card" onclick="nonsenseAttack()">
+            <h2>🤪 Saçmalord 3000</h2>
+            <div class="stats-bar">
+                <div class="stats-fill" style="background: linear-gradient(90deg, #ff0000, #ffff00)"></div>
+            </div>
+            <ul>
+                <li>📏 Saçmalık Seviyesi: 15800dB</li>
+                <li>💫 Yetenek: Işık Hızında Yalan Üretme</li>
+                <li>🎯 Rekor: 1 Saniyede 158 Saçmalık</li>
+            </ul>
+            <div id="nonsenseText" style="margin-top: 20px; font-size: 24px;"></div>
+        </div>
+    </div>
+
+    <div class="secret-button" onclick="secretMode()"></div>
+
+    <audio id="sound1" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg"></audio>
+    <audio id="sound2" src="https://actions.google.com/sounds/v1/cartoon/clown_horn.ogg"></audio>
+
+<script>
+let discoActive = true;
+let nonsenseCount = 0;
+const nonsensePhrases = [
+    "NASA benim soyadımı kullanıyor!",
+    "158 aslında kuantum şifresi!",
+    "Sıla dün 159cm'ydi!",
+    "Bu yazıyı okurken boyun uzuyor!",
+    "Disco modu uzaylı teknolojisi!"
+];
+
+function toggleDisco() {
+    discoActive = !discoActive;
+    document.getElementById('discoEffect').style.display = discoActive ? 'block' : 'none';
+    document.body.style.background = discoActive ? 
+        'linear-gradient(45deg, #ff00ff, #00ff88)' : 
+        '#000';
+    playSound(1);
+}
+
+function meteorRain() {
+    for(let i=0; i<158; i++) {
+        setTimeout(() => {
+            const meteor = document.createElement('div');
+            meteor.style.position = 'fixed';
+            meteor.style.left = Math.random() * 100 + 'vw';
+            meteor.style.fontSize = '40px';
+            meteor.textContent = '☄️';
+            meteor.style.animation = 'meteorFall 3s linear';
+            document.body.appendChild(meteor);
+            setTimeout(() => meteor.remove(), 2900);
+        }, i * 50);
+    }
+    playSound(2);
+}
+
+function nonsenseAttack() {
+    nonsenseCount++;
+    document.getElementById('nonsenseText').textContent = nonsensePhrases[nonsenseCount % 5];
+    document.getElementById('muhammetcan-card').style.transform = 
+        `scale(${1 + nonsenseCount*0.1}) rotate(${nonsenseCount*10}deg)`;
+    document.body.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+    playSound(1);
+}
+
+function secretMode() {
+    document.body.innerHTML += `
+        <div style="position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); font-size:50px; animation: rainbow 1s infinite;">
+            🎉 SÜRPRİZ MOD! 🎉<br>
+            Sıla'nın boyu: ${158 + nonsenseCount}cm!
+        </div>
+    `;
+    setInterval(() => {
+        document.body.style.background = `hsl(${Math.random()*360}, 100%, 50%)`;
+    }, 100);
+}
+
+function playSound(id) {
+    const sound = document.getElementById(`sound${id}`);
+    sound.currentTime = 0;
+    sound.play();
+}
+
+// Fare takip efekti
+document.addEventListener('mousemove', (e) => {
+    if(discoActive) {
+        const spark = document.createElement('div');
+        spark.style.position = 'fixed';
+        spark.style.left = e.clientX + 'px';
+        spark.style.top = e.clientY + 'px';
+        spark.textContent = ['✨','🌠','🎇','🌈'][Math.floor(Math.random()*4)];
+        spark.style.fontSize = Math.random() * 30 + 20 + 'px';
+        document.body.appendChild(spark);
+        setTimeout(() => spark.remove(), 1000);
+    }
+});
+
+// Gizli kısayol
+document.addEventListener('keydown', (e) => {
+    if(e.key === 'm') {
+        document.body.style.transform = 'scale(0.8) rotate(10deg)';
+        setTimeout(() => {
+            document.body.style.transform = '';
+        }, 500);
+    }
+});
+</script>
+</body>
+</html>
